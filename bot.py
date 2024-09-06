@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 import json
 import os
 
@@ -24,21 +25,28 @@ def save_character_data(data):
         json.dump(data, f, indent=4)
 
 # Initialize character data on startup
-characters = load_character_data()
+characters = {}
+
+# Register slash commands
+@bot.event
+async def on_ready():
+    await bot.tree.sync()  # Sync the commands with Discord
+    print(f'We have logged in as {bot.user}')
 
 # Command to create a character and save to JSON
-@bot.command()
-async def create_character(ctx, name: str, image_url: str, *, background: str):
-    """Create a character and store it in a JSON file specific to this guild."""
-    guild_id = str(ctx.guild.id)
-    user_id = str(ctx.author.id)
-    
+@bot.tree.command(name='create_character', description="Create a character and store it in a JSON file specific to this guild.")
+async def create_character(interaction: discord.Interaction, name: str, image_url: str, *, background: str):
+    guild_id = str(interaction.guild_id)
+
+    if guild_id in characters and name in characters[guild_id]:
+        await interaction.response.send_message(f"A character with the name '{name}' already exists in this guild!")
+        return
+
+    user = interaction.user
+    user_id = str(user.id) 
+
     if guild_id not in characters:
         characters[guild_id] = {}
-
-    if name in characters[guild_id]:
-        await ctx.send(f"A character with the name '{name}' already exists in this guild!")
-        return
 
     characters[guild_id][name] = {
         'owner_id': user_id,
@@ -47,69 +55,46 @@ async def create_character(ctx, name: str, image_url: str, *, background: str):
         'allowed_users': [user_id]  # Start with the creator having access
     }
     
-    # Save updated characters to JSON
-    save_character_data(characters)
-    
-    await ctx.send(f"Character '{name}' created and saved for this guild.")
+    await interaction.response.send_message(f"Character '{name}' created and saved for this guild.")
 
-# Command to use a character
-@bot.command()
-async def use_character(ctx, name: str):
-    """Switch to a character in this guild."""
-    guild_id = str(ctx.guild.id)
-    user_id = str(ctx.author.id)
-    
-    if guild_id not in characters or name not in characters[guild_id]:
-        await ctx.send(f"Character '{name}' does not exist in this guild.")
-        return
-    
-    char_data = characters[guild_id][name]
-    if user_id not in char_data['allowed_users']:
-        await ctx.send("You don't have permission to use this character.")
+# Slash command to speak as a character
+@bot.tree.command(name="speak_as", description="Send a message as a character")
+async def speak_as_character(interaction: discord.Interaction, character_name: str, message: str):
+    guild_id = str(interaction.guild_id)
+    if guild_id not in characters or character_name not in characters[guild_id]:
+        await interaction.response.send_message(f"Character `{character_name}` does not exist.", ephemeral=True)
         return
 
-    bot.current_character = name
-    await ctx.send(f"You are now using the character '{name}'.")
-
-# Command to send a message as a character
-@bot.event
-async def on_message(message):
-    """Send a message as a character if a character is in use."""
-    if message.author == bot.user:
+    character = characters[guild_id][character_name]
+    user_id = str(interaction.user.id)
+    if user_id not in character["allowed_users"]:
+        await interaction.response.send_message(f"You do not have permission to use the character `{character_name}`.", ephemeral=True)
         return
 
-    guild_id = str(message.guild.id)
-    user_id = str(message.author.id)
-    character_name = getattr(bot, "current_character", None)
+    channel = interaction.channel
 
-    if character_name and guild_id in characters:
-        char_data = characters[guild_id].get(character_name)
-        if char_data and user_id in char_data['allowed_users']:
-            embed = discord.Embed(description=message.content)
-            embed.set_author(name=character_name)
-            embed.set_thumbnail(url=char_data['image_url'])
-            await message.channel.send(embed=embed)
-            await message.delete()  # Delete original message
-        else:
-            await message.channel.send("You don't have permission to use this character.")
-            return
-    await bot.process_commands(message)
+    # Send the message as the specified character
+    embed = discord.Embed(description=message, color=discord.Color.blue())
+    embed.set_author(name=character_name)
+    
+    await channel.send(embed=embed)
+    await interaction.response.send_message(f"Message sent as `{character_name}`.", ephemeral=True)
 
 # Command to allow another user to use the character
-@bot.command()
-async def allow_character(ctx, character_name: str, user: discord.User):
+@bot.tree.command(name='allow_character', description="Allow another user to use a character in this guild.")
+async def allow_character(interaction: discord.Interaction, character_name: str, user: discord.User):
     """Allow another user to use a character in this guild."""
-    guild_id = str(ctx.guild.id)
-    user_id = str(ctx.author.id)
+    guild_id = str(interaction.guild_id)
+    user_id = str(interaction.author.id)
     
     if guild_id not in characters or character_name not in characters[guild_id]:
-        await ctx.send(f"Character '{character_name}' does not exist in this guild.")
+        await interaction.response.send_message(f"Character '{character_name}' does not exist in this guild.")
         return
     
     char_data = characters[guild_id][character_name]
     
     if char_data['owner_id'] != user_id:
-        await ctx.send("You are not the owner of this character.")
+        await interaction.response.send_message("You are not the owner of this character.")
         return
     
     char_data['allowed_users'].append(str(user.id))
@@ -117,50 +102,57 @@ async def allow_character(ctx, character_name: str, user: discord.User):
     # Save updated characters to JSON
     save_character_data(characters)
     
-    await ctx.send(f"User {user.name} can now use the character '{character_name}' in this guild.")
+    await interaction.response.send_message(f"User {user.name} can now use the character '{character_name}' in this guild.")
 
-# Command to get character info
-@bot.command()
-async def character_info(ctx, name: str):
-    """Get character info, including background, for this guild."""
-    guild_id = str(ctx.guild.id)
-    
-    if guild_id not in characters or name not in characters[guild_id]:
-        await ctx.send(f"Character '{name}' not found in this guild.")
-        return
-    
-    char_data = characters[guild_id][name]
-    owner = await bot.fetch_user(int(char_data['owner_id']))
-    
-    embed = discord.Embed(title=f"Character Info: {name}")
-    embed.set_thumbnail(url=char_data['image_url'])
-    embed.add_field(name="Owner", value=owner.name)
-    embed.add_field(name="Background", value=char_data['background'])
-    
-    await ctx.send(embed=embed)
+# Slash command to load characters from JSON message
+@bot.tree.command(name="load_characters", description="Load characters from a JSON message")
+@app_commands.describe(message_id="The ID of the message containing the JSON data")
+async def load_characters(interaction: discord.Interaction, message_id: str):
+    channel = interaction.channel
 
-# Command to load character data from a message in a channel
-@bot.command()
-async def init_from_message(ctx, channel: discord.TextChannel, message_id: int):
-    """Initialize character data from a JSON message in a specified channel for this guild."""
-    guild_id = str(ctx.guild.id)
-    
     try:
-        message = await channel.fetch_message(message_id)
-        json_data = json.loads(message.content)  # Assuming the message content is JSON
-        
+        message = await channel.fetch_message(int(message_id))
+
+        if not message.attachments:
+            await interaction.response.send_message("No file attachments found in the message.", ephemeral=True)
+            return
+
+        # Assuming there's only one attachment
+        attachment = message.attachments[0]
+
+        file = await attachment.read()
+        try:
+            characters_data = json.loads(file.decode('utf-8'))
+        except json.JSONDecodeError:
+            await interaction.response.send_message("The file content is not valid JSON.", ephemeral=True)
+            return
+
+        guild_id = str(interaction.guild.id)
         if guild_id not in characters:
             characters[guild_id] = {}
-        
-        # Load the JSON data into the bot's character data and save it
-        characters[guild_id].update(json_data)
-        save_character_data(characters)
-        
-        await ctx.send("Character data successfully initialized from the message for this guild.")
-    except discord.NotFound:
-        await ctx.send(f"Message with ID {message_id} not found in {channel.name}.")
-    except json.JSONDecodeError:
-        await ctx.send("Failed to parse JSON data from the message.")
+
+        characters[guild_id].update(characters_data)
+
+        await interaction.response.send_message(f"Characters loaded successfully from message {message_id}.", ephemeral=True)
+    except Exception as e:
+        await interaction.response.send_message(f"Failed to load characters: {str(e)}", ephemeral=True)
+
+# Command to export character data to a message in a channel
+@bot.tree.command(name="export_characters", description="Export the list of characters as JSON")
+async def export_characters(interaction: discord.Interaction):
+    guild_id = str(interaction.guild_id)
+    if not characters or guild_id not in characters:
+        await interaction.response.send_message("No characters to export.", ephemeral=True)
+        return
+
+    with open("characters.json", "w") as f:
+        json.dump(characters[guild_id], f, indent=4)
+
+    # Send the JSON file to the channel
+    await interaction.response.send_message(file=discord.File("characters.json"))
+    # Delete the JSON file after sending
+    os.remove("characters.json")
 
 # Run the bot
-bot.run(os.getenv('DISCORD_TOKEN'))
+# bot.run(os.getenv('DISCORD_TOKEN'))
+bot.run('MTI4MTAzMzkzOTY2NTk0ODcyNQ.Gj36yY.D9j5aDj5zUUVlLvLFoOD9Dzy_Z4zMfgvrZyGDI')
