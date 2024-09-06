@@ -163,4 +163,4 @@ async def init_from_message(ctx, channel: discord.TextChannel, message_id: int):
         await ctx.send("Failed to parse JSON data from the message.")
 
 # Run the bot
-bot.run('token')
+bot.run(os.getenv('DISCORD_TOKEN'))
