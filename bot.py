@@ -243,6 +243,4 @@ async def export_json_to_channel(channel, data):
     await channel.send(file=discord.File("characters.json"))
     os.remove("characters.json")
 
-# Run the bot
-# bot.run(os.getenv('DISCORD_TOKEN'))
-bot.run('MTI4MTAzMzkzOTY2NTk0ODcyNQ.Gj36yY.D9j5aDj5zUUVlLvLFoOD9Dzy_Z4zMfgvrZyGDI')
+bot.run(os.getenv('DISCORD_TOKEN'))
