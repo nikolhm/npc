@@ -1,0 +1,34 @@
+Terms of Service for NPC Discord Bot
+1. Acceptance of Terms
+By adding and using the NPC bot ("the Bot") on your Discord server, you agree to the following Terms of Service. If you do not agree with these terms, please refrain from using the Bot.
+
+2. Bot Usage
+NPC is designed to enhance role-playing experiences by allowing users to create, manage, and interact with custom characters within Discord servers. You may use the Bot for any lawful purposes related to its intended function, provided you follow the rules outlined below.
+
+3. Prohibited Use
+You agree not to use the Bot for:
+    Violating any laws or regulations.
+    Harassing, abusing, or harming other users.
+    Distributing spam, malware, or other malicious content.
+    Attempting to hack, exploit, or disrupt the bot’s functionality.
+
+4. Character Data and Backups
+The Bot allows users to create and manage characters, and backs up character data in a designated private channel within the server. As a user or server administrator, you are responsible for ensuring the appropriate use of this feature within your server.
+
+5. Permissions
+By using NPC, you grant the bot permission to:
+    Access and store relevant user data (e.g., user IDs) to manage character ownership and permissions.
+    Create and manage webhooks in order to send messages as characters.
+    Access designated channels within your Discord server to store backup data.
+
+6. Disclaimer
+The Bot is provided "as-is" and without any warranties, express or implied. We do not guarantee the Bot’s uptime, availability, or its performance. Use of the Bot is at your own risk. We are not liable for any loss, damage, or harm resulting from your use of the Bot.
+
+7. Termination of Service
+We reserve the right to terminate or suspend the Bot’s service at any time without notice, for any reason, including but not limited to violations of these Terms of Service.
+
+8. Changes to These Terms
+We reserve the right to update or modify these Terms of Service at any time. Continued use of the Bot following changes indicates your acceptance of the updated terms.
+
+9. Contact
+For any questions or concerns regarding these terms or the Bot’s operation, please contact the bot developer through the support channels on GitHub or Discord.
