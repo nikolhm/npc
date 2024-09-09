@@ -1,6 +1,3 @@
-
-Here’s a light-weight privacy policy for your Discord bot:
-
 Privacy Policy for Discord NPC Bot
 1. Introduction
 This Discord bot ("NPC Bot") is designed to enhance the role-playing experience by allowing users to manage and interact with characters on Discord servers. Your privacy is important to us, and this policy explains how the bot handles and stores any data it interacts with.
