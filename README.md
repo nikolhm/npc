@@ -73,6 +73,10 @@ The bot uses a specific text channel named `npc-character-backup` for backing up
 
 Feel free to open issues or submit pull requests if you have suggestions for improvements or bug fixes.
 
+## Development Process
+
+I've created a brief [Google Slides presentation](https://docs.google.com/presentation/d/1XILFKQcqIjoWt-Wn_A2jL20M7BzjStOAW8Q_cokHhB4/edit?usp=sharing) for anyone who is interested!
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
