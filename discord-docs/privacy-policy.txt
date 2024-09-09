@@ -1,0 +1,40 @@
+
+Here’s a light-weight privacy policy for your Discord bot:
+
+Privacy Policy for Discord NPC Bot
+1. Introduction
+This Discord bot ("NPC Bot") is designed to enhance the role-playing experience by allowing users to manage and interact with characters on Discord servers. Your privacy is important to us, and this policy explains how the bot handles and stores any data it interacts with.
+
+2. Data Collection
+The NPC Bot collects and processes the following types of data:
+    User Data: The bot stores basic user information (such as Discord user IDs) for functionality like managing character ownership and permissions.
+    Guild Data: The bot stores character data, which includes character names, images (URLs), backgrounds, and permissions specific to the guild (Discord server).
+    Webhook Data: For sending messages as characters, the bot temporarily creates and uses webhooks within the server.
+
+3. Data Usage
+The data collected is used for:
+    Managing characters and their respective permissions.
+    Sending messages on behalf of characters through webhooks.
+    Storing backups of character data in a designated backup channel within the server.
+
+4. Data Storage and Retention
+All data (character and user information) is stored:
+    Locally on the server where the bot is hosted.
+    In a backup channel on your Discord server for the purpose of restoring character information if needed.
+
+No personal data is stored outside the Discord server or shared with third parties.
+
+5. Data Sharing
+The bot does not share any data with third-party services. All interactions and data storage remain within the Discord server where the bot is used.
+
+6. User Control
+Server administrators can delete character data using the /delete_character command. Users with the appropriate permissions can manage, edit, and export character data at any time.
+
+7. Security
+We strive to protect the bot and its data from unauthorized access. The bot only stores minimal necessary information and operates within the constraints of the Discord platform.
+
+8. Changes to This Policy
+This privacy policy may be updated occasionally to reflect changes in functionality or legal requirements. Continued use of the bot after any changes indicates your acceptance of the updated policy.
+
+9. Contact Information
+If you have any questions or concerns about this privacy policy or the bot’s operation, feel free to reach out to the bot developer via the support channel on GitHub or Discord.
