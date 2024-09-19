@@ -4,6 +4,8 @@
 
 This Discord bot allows you to manage and interact with characters in your server. It supports creating, editing, and deleting characters, as well as sending messages as those characters using webhooks. It also provides functionality for exporting and importing character data to and from a backup channel.
 
+![Demo](https://github.com/f1nn3g4n/npc/blob/main/demo/demo.gif)
+
 ## Features
 
 - **Create Characters**: Store character data including name, image URL, and background.
