@@ -19,7 +19,7 @@ This Discord bot allows you to manage and interact with characters in your serve
 ## Prerequisites
 
 - Python 3.8 or higher
-- `discord.py` and `aiohttp` libraries
+- `discord.py`, `pyyaml` and `aiohttp` libraries
 
 ## Installation
 
@@ -47,13 +47,14 @@ This Discord bot allows you to manage and interact with characters in your serve
 
    - `/create_character <name> <image_url> <background>`: Create a new character.
    - `/delete_character <name>`: Delete a character.
+   - `/delete_all_characters`: Delete all characters for the server.
    - `/edit_character <name> [new_name] [image_url] [background]`: Edit a character's details.
    - `/allow_character <character_name> <user>`: Allow another user to use a character.
    - `/view_character <character_name>`: View a character's information.
    - `/speak_as <character_name> <message>`: Send a message as a character.
    - `/init`: Initialize or refresh character data from the backup channel.
    - `/load_characters_from_message <message_id>`: Load characters from a JSON message.
-   - `/export_characters`: Export character data to the backup channel.
+   - `/export_characters_manual`: Export character data to the backup channel.
 
 ## Configuration
 
@@ -64,6 +65,7 @@ The bot uses a specific text channel named `npc-character-backup` for backing up
 ### Environment Variables
 
 - **DISCORD_TOKEN**: Your Discord bot token. Make sure this is set in your environment.
+- **Oracle DB information**: This bot is designed to use an Oracle Cloud DB in Light mode. Copy `example-config.yml` and rename to `config.yml` with your DB information.
 
 ## Troubleshooting
 
