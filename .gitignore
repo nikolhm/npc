@@ -1,2 +1,4 @@
 bot_token.txt
 path/*
+db-info/config.yml
+db-info/db-wallet
