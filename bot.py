@@ -365,28 +365,28 @@ async def init(interaction: discord.Interaction):
             try:
                 await load_character_data(interaction, last_message)
             except json.JSONDecodeError:
-                await interaction.response.send_message("Failed to load character data. The data might be corrupted.", ephemeral=True)
+                await interaction.followup.send("Failed to load character data. The data might be corrupted.", ephemeral=True)
         else:
-            await interaction.response.send_message("No backup message found in the private channel.", ephemeral=True)
+            await interaction.followup.send("No backup message found in the private channel.", ephemeral=True)
     else:
-        await interaction.response.send_message("Backup channel not found, creating one.", ephemeral=True)
+        await interaction.followup.send("Backup channel not found, creating one.", ephemeral=True)
         await create_backup_channel(interaction.guild)
-        await interaction.response.edit_message("Backup channel created. Add a character JSON to that channel and rerun command to upload.", ephemeral=True)
+        await interaction.followup.send("Backup channel created. Add a character JSON to that channel and rerun command to upload.", ephemeral=True)
 
 @bot.tree.command(name="load_characters_from_message", description="Load characters from a JSON message")
 @app_commands.describe(message_id="The ID of the message containing the JSON data")
 async def load_characters_from_message(interaction: discord.Interaction, message_id: str):
     channel = interaction.channel
-
+    await interaction.response.defer()
     try:
         message = await channel.fetch_message(int(message_id))
         load_character_data(interaction, message)  
     except Exception as e:
-        await interaction.response.send_message(f"Failed to load characters: {str(e)}", ephemeral=True)
+        await interaction.followup.send(f"Failed to load characters: {str(e)}", ephemeral=True)
 
 async def load_character_data(interaction: discord.Interaction, message: discord.Message):
     if not message.attachments:
-        await interaction.response.send_message("No file attachments found in the message.", ephemeral=True)
+        await interaction.followup.send("No file attachments found in the message.", ephemeral=True)
         return
 
     # Assuming there's only one attachment
@@ -396,7 +396,7 @@ async def load_character_data(interaction: discord.Interaction, message: discord
     try:
         characters_data = json.loads(file.decode('utf-8'))
     except json.JSONDecodeError:
-        await interaction.response.send_message("The file content is not valid JSON.", ephemeral=True)
+        await interaction.followup.send("The file content is not valid JSON.", ephemeral=True)
         return
 
     guild_id = str(interaction.guild.id)
@@ -416,9 +416,9 @@ async def load_character_data(interaction: discord.Interaction, message: discord
                 'allowed_users': json.dumps(character_info.get('allowed_users', []))
             })
         connection.commit()
-        await interaction.response.send_message(f"Characters loaded successfully from message.", ephemeral=True)
+        await interaction.followup.send(f"Characters loaded successfully from message.", ephemeral=True)
     except Exception as e:
-        await interaction.response.send_message(f"Failed to load characters: {str(e)}", ephemeral=True)
+        await interaction.followup.send(f"Failed to load characters: {str(e)}", ephemeral=True)
     finally:
         cursor.close()
         connection.close()
