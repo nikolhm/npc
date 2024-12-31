@@ -54,5 +54,12 @@ bot.tree.add_command(init)
 bot.tree.add_command(load_characters_from_message)
 bot.tree.add_command(export_characters_manual)
 
+### MERCHANT COMMANDS ###
+bot.tree.add_command(add_inventory)
+bot.tree.add_command(add_stock)
+bot.tree.add_command(remove_inventory)
+bot.tree.add_command(see_inventory)
+bot.tree.add_command(buy_item)
+bot.tree.add_command(edit_inventory)
 
 bot.run(os.getenv('DISCORD_TOKEN'))

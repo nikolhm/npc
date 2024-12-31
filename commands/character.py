@@ -10,10 +10,11 @@ async def owner_check(interaction, character):
         return False
     return True
 
-async def allowed_users_check(interaction, character):
+async def allowed_users_check(interaction, character, send_followup=True):
     user_id = str(interaction.user.id)
     if user_id not in character['allowed_users']:
-        await interaction.followup.send("You do not have permission to use this character.", ephemeral=True)
+        if send_followup:
+            await interaction.followup.send("You do not have permission to use this character.", ephemeral=True)
         return False
     return True
 
@@ -22,7 +23,7 @@ def get_character(guild_id, name):
     cursor = connection.cursor()
 
     cursor.execute('''
-        SELECT character_name, owner_id, image_url, background, allowed_users
+        SELECT id, character_name, owner_id, image_url, background, allowed_users
         FROM characters
         WHERE guild_id = :guild_id AND character_name = :name
     ''', {"guild_id": guild_id, "name": name})
@@ -30,11 +31,12 @@ def get_character(guild_id, name):
     character = cursor.fetchone()
     if character:
         character = {
-            "name": character[0],
-            "owner_id": character[1],
-            "image_url": character[2],
-            "background": character[3],
-            "allowed_users": json.loads(character[4].read())
+            "id": character[0],
+            "name": character[1],
+            "owner_id": character[2],
+            "image_url": character[3],
+            "background": character[4],
+            "allowed_users": json.loads(character[5].read())
         }
 
     cursor.close()

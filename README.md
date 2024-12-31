@@ -55,6 +55,12 @@ This Discord bot allows you to manage and interact with characters in your serve
    - `/init`: Initialize or refresh character data from the backup channel.
    - `/load_characters_from_message <message_id>`: Load characters from a JSON message.
    - `/export_characters_manual`: Export character data to the backup channel.
+   - `/add_inventory`: Give your character inventory for your party to buy!
+   - `/edit_inventory`: Edit the existing inventory for a character.
+   - `/remove_inventory`: Remove an inventory item for a character.
+   - `/add_stock`: Add inventory stock for a character.
+   - `/see_inventory`: See inventory for a character. Allowed users see all details about the items, while everyone else only sees the name, price, and description.
+   - `/buy_item`: Purchase an item from a character.
 
 ## Configuration
 
