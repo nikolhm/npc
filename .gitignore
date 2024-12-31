@@ -2,3 +2,5 @@ bot_token.txt
 path/*
 db-info/config.yml
 db-info/db-wallet
+commands/__pycache__/*
+db_migrations/migrations/__pycache__/*
