@@ -15,6 +15,7 @@ This Discord bot allows you to manage and interact with characters in your serve
 - **View Characters**: Retrieve and view character information.
 - **Speak as Character**: Send messages as a character using webhooks.
 - **Backup and Restore**: Export character data to a backup channel and load it from a JSON message.
+- **Configure Asynchronous Marketplaces**: Allow your players to buy items from characters and use their loot! Avoid setting aside playtime to barter and sell.
 
 ## Prerequisites
 
