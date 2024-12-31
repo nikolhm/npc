@@ -8,7 +8,7 @@ import yaml
 BACKUP_CHANNEL = 'npc-character-backup'
 
 def load_config():
-    with open("./db-info/config.yml", "r") as file:
+    with open("../db-info/config.yml", "r") as file:
         return yaml.safe_load(file)
 
 config = load_config()
