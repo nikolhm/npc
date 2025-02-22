@@ -1,0 +1,5 @@
+ORACLE_USER=myuser
+ORACLE_PASSWORD=mypassword
+DISCORD_TOKEN=some_discord_token
+HOST_ARCHITECTURE=amd64 #set to arm64 if using ARM
+
