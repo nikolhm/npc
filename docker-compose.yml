@@ -14,7 +14,6 @@ services:
       start_period: 10s
     volumes:
       - oracle-data:/opt/oracle/oradata
-      - ./init-script.sql:/opt/oracle/scripts/setup.sql
 
   app:
     build: .
