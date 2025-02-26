@@ -1,7 +1,6 @@
 bot_token.txt
+characters.json
 path/*
-db-info/config.yml
-db-info/db-wallet
 __pycache__
 .venv
 .env

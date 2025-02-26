@@ -1,18 +1,14 @@
-version: "3.8"
-
 services:
   oracle_db:
-    image: container-registry.oracle.com/database/free:latest-lite
-    container_name: oracle-lite
+    image: gvenzl/oracle-free
+    container_name: oracle-db
     restart: unless-stopped
-    environment:
-      - ORACLE_USER=${ORACLE_USER}
-      - ORACLE_PASSWORD=${ORACLE_PASSWORD}
+    env_file:
+      - .env
     ports:
       - "1521:1521"
-      - "5500:5500"
     healthcheck:
-      test: ["CMD", "sqlplus", "-L", "sys/${ORACLE_PASSWORD}@localhost:1521/FREE as sysdba", "@/opt/oracle/scripts/startup.sql"]
+      test: ["CMD", "sqlplus", "-L", "sys/${ORACLE_PASSWORD}@${ORACLE_DSN} as sysdba", "@/opt/oracle/scripts/startup.sql"]
       interval: 10s
       retries: 5
       start_period: 10s
@@ -25,12 +21,12 @@ services:
     container_name: bot-app
     restart: unless-stopped
     depends_on:
-      - oracle_db
+      oracle_db:
+        condition: service_healthy
+    env_file:
+      - .env
     environment:
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - ORACLE_USER=${ORACLE_USER}
-      - ORACLE_PASSWORD=${ORACLE_PASSWORD}
-      - ORACLE_DSN=oracle_db:1521/FREE
+      PYTHONUNBUFFERED: 1
     volumes:
       - .:/app
     command: ["python", "bot.py"]
