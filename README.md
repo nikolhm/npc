@@ -48,7 +48,27 @@ This Discord bot allows you to manage and interact with characters in your serve
    
    This will spin up the docker containers that runs the Discord bot and the Oracle database it uses to store its data.
 
-## Install the app to your server
+## Viewing the log output
+
+   ```bash
+   docker compose logs -f
+   ```
+
+This will show the logs for both the bot and the database.
+
+If you wan to just see the logs from the bot, run:
+
+   ```bash
+   docker compose logs npc-bot-app -f
+   ```
+
+## Stopping the App Backend
+
+   ```bash
+   docker compose down
+   ```
+
+## Installing the app to your server
 
 1. **Create a Discord App**
 
@@ -104,7 +124,7 @@ The bot uses a specific text channel named `npc-character-backup` for backing up
 ### Environment Variables
 
 - **DISCORD_TOKEN**: Your Discord bot token. Make sure this is set in your environment.
-- **Oracle DB information**: This bot is designed to use an Oracle Cloud DB. The Docker configuration uses [gvenzl](https://github.com/gvenzl/oci-oracle-free)
+- **Oracle DB information**: This bot is designed to use an Oracle Cloud DB. The Docker configuration uses [gvenzl/oracle-free](https://github.com/gvenzl/oci-oracle-free).
 
 ## Troubleshooting
 
