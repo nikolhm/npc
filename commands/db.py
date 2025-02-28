@@ -3,8 +3,15 @@ from discord import app_commands
 import json
 import os
 import oracledb
+import yaml
 
 BACKUP_CHANNEL = 'npc-character-backup'
+
+def load_config():
+    with open("./db-info/config.yml", "r") as file:
+        return yaml.safe_load(file)
+
+config = load_config()
 
 def create_oracle_connection():
     connection = oracledb.connect(
