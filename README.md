@@ -56,7 +56,7 @@ This Discord bot allows you to manage and interact with characters in your serve
 
 This will show the logs for both the bot and the database.
 
-If you wan to just see the logs from the bot, run:
+If you want to just see the logs from the bot, run:
 
    ```bash
    docker compose logs -f npc_bot_app
