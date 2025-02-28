@@ -59,7 +59,7 @@ This will show the logs for both the bot and the database.
 If you wan to just see the logs from the bot, run:
 
    ```bash
-   docker compose logs npc-bot-app -f
+   docker compose logs -f npc_bot_app
    ```
 
 ## Stopping the App Backend
