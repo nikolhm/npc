@@ -1,7 +1,7 @@
 services:
   oracle_db:
     image: gvenzl/oracle-free
-    container_name: oracle-db
+    container_name: npc-oracle-db
     restart: unless-stopped
     env_file:
       - .env
@@ -17,7 +17,7 @@ services:
 
   app:
     build: .
-    container_name: bot-app
+    container_name: npc-bot-app
     restart: unless-stopped
     depends_on:
       oracle_db:
