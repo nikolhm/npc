@@ -1,5 +1,5 @@
 services:
-  oracle_db:
+  npc_oracle_db:
     image: gvenzl/oracle-free
     container_name: npc-oracle-db
     restart: unless-stopped
@@ -15,12 +15,12 @@ services:
     volumes:
       - oracle-data:/opt/oracle/oradata
 
-  app:
+  npc_bot_app:
     build: .
     container_name: npc-bot-app
     restart: unless-stopped
     depends_on:
-      oracle_db:
+      npc_oracle_db:
         condition: service_healthy
     env_file:
       - .env
